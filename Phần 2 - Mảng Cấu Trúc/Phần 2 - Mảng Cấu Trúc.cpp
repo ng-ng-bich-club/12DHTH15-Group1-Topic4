@@ -69,12 +69,12 @@ void displayAPrescription(Prescription prescription) {
     cout << setw(15) << left << "STT_Thuoc";
     cout << setw(25) << left << "Ten thuoc";
     cout << setw(15) << left << "Biet duoc";
-        cout << setw(15) << left << j + 1;
-        cout << setw(25) << left << prescription.listMedicine[j].Name;
-        cout << setw(15) << left << prescription.listMedicine[j].PatentMedicine;
-        cout << setw(10) << right << prescription.listMedicine[j].Quatily;
-        cout << setw(15) << right << prescription.listMedicine[j].UnitPrice; 
-        cout << setw(15) << right << prescription.listMedicine[j].Quatily * prescription.listMedicine[i].UnitPrice << endl;
+    cout << setw(10) << right << "So luong";
+    cout << setw(15) << right << "Don gia";
+    cout << setw(15) << right << "Thanh tien" << endl;
+    //-------------------------------------------------------------------//
+    for (int i = 0; i < prescription.nMedicine; i++) {
+        cout << setw(5) << " ";
         cout << setw(15) << left << i + 1;
         cout << setw(25) << left << prescription.listMedicines[i].Name;
         cout << setw(15) << left << prescription.listMedicines[i].PatentMedicine;
@@ -156,14 +156,56 @@ void deleteThePrecriptionsOfPatientX(Prescription prescription[], int& nPrescrip
             i--;
         }
     }
-    }
-    return totalallprescription;
 }
-//Ham menu
-void Menu() {
-    cout << "Welcome to Menu !" << endl;
-    cout << "0.\tExit" << endl;
-    cout << "1.\tTao ma tran nhap tu phim/ngau nhien/doc tu file" << endl;
+
+//Ham tim so luong thuoc nhieu nhat
+int getTheMaxnMedicine(Prescription prescription[], int nPrescription) {
+    int max = prescription[0].nMedicine;
+    for (int i = 1; i < nPrescription; i++) {
+        if (prescription[i].nMedicine > max) {
+            max = prescription[i].nMedicine;
+        }
+    }
+    return max;
+}
+//Ham tim tong tien thuoc nhieu nhat theo so luong thuoc nhieu nhat
+int getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription) {
+    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
+    float maxTotalMoney_ByTheMaxnMedicine = -1.0;
+    bool flag = false;
+    for (int i = 1; i < nPrescription; i++) {
+        if (prescription[i].nMedicine == maxnMedicine) {
+            if (flag == false) {
+                maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
+                flag = true;
+            }
+            else {
+                if (prescription[i].TotalMoney > maxTotalMoney_ByTheMaxnMedicine) {
+                    maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
+                }
+            }
+        }
+    }
+    return maxTotalMoney_ByTheMaxnMedicine;
+}
+//Ham hien thi thong tin cua don thuoc co so luong thuoc nhieu nhat va tong tien cao nhat
+void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescription prescription[], int nPrescription) {
+    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
+    float maxTotalMoney_ByTheMaxnMedicine = getTheMaxTotalMoneyByTheMaxnMedicine(prescription, nPrescription);
+    bool flag = false;
+    for (int i = 0; i < nPrescription; i++) {
+        if (prescription[i].nMedicine == maxnMedicine && prescription[i].TotalMoney == maxTotalMoney_ByTheMaxnMedicine) {
+            if (flag == false) {
+                displayAllPrescriptions(prescription, 0);
+                flag = true;
+            }
+            else {
+                cout << setw(10) << left << i + 1;
+                displayAPrescription(prescription[i]);
+            }
+        }
+    }
+}
 
 //Ham menu
 void Menu() {
@@ -181,6 +223,7 @@ void Menu() {
     cout << "10.\tTu ma tran A tao ma tran F duoc dich phai xoay vong cac cot theo truc dung voi chieu tu trai sang phai" << endl;
     cout << "11.\tTu ma tran A tao va xuat ra mot ma tran I duoc xoan oc giam dan nguoc chieu kim dong ho" << endl;
 }
+
 int main() {
     Prescription A[2];
 
@@ -221,43 +264,43 @@ int main() {
     string directory = "Text1.txt";
 
 
-    //do {
-    //    system("cls");
-    //    Menu();
-    //    cout << "Hay chon phuong thuc123 : "; cin >> option;
-    //    system("cls");
-    //    switch (option) {
-    //    case 0:cout << "Goodbye  !:<" << endl;
-    //        break;
-    //    case 1:
-    //        break;
-    //    case 2:
-    //        break;
-    //    case 3:
-    //        break;
-    //    case 4:
-    //        break;
-    //    case 5:
-    //        break;
-    //    case 6:;
-    //        break;
-    //    case 7:
-    //        break;
-    //    case 8:
-    //        break;
-    //    case 9:
-    //        break;
-    //    case 10:
-    //        break;
-    //    case 11:
-    //        break;
-    //    default:cout << "Phuong thuc khong hop le !! :<" << endl;
-    //    }
-    //    cout << setfill('-');		// set fill ' ' to '-'
-    //    cout << setw(115) << "-" << endl;	// fill 80 char '-'
-    //    // reset fill to ' '
-    //    cout << setfill(' ');
-    //    system("pause>0");
-    //} while (option != 0);
+    do {
+        system("cls");
+        Menu();
+        cout << "Hay chon phuong thuc123 : "; cin >> option;
+        system("cls");
+        switch (option) {
+        case 0:cout << "Goodbye  !:<" << endl;
+            break;
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+            break;
+        case 5:
+            break;
+        case 6:;
+            break;
+        case 7:
+            break;
+        case 8:
+            break;
+        case 9:
+            break;
+        case 10:
+            break;
+        case 11:
+            break;
+        default:cout << "Phuong thuc khong hop le !! :<" << endl;
+        }
+        cout << setfill('-');		// set fill ' ' to '-'
+        cout << setw(115) << "-" << endl;	// fill 80 char '-'
+        // reset fill to ' '
+        cout << setfill(' ');
+        system("pause>0");
+    } while (option != 0);
     return 0;
 }
