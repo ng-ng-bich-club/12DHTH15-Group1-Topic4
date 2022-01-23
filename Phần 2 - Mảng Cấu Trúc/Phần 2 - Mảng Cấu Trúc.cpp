@@ -42,7 +42,7 @@ struct Prescription {
     string ID;//toi da 10 ki tu
     string Patient;//toi da 30 ki tu
     string Doctor;//toi da 30 ki tu
-    Medicine listMedicine[MAX];//toi da 20
+    Medicine listMedicines[MAX];//toi da 20
     float TotalMoney;
     int nMedicine;
 };
@@ -76,11 +76,11 @@ void displayAPrescription(Prescription prescription) {
     for (int i = 0; i < prescription.nMedicine; i++) {
         cout << setw(5) << " ";
         cout << setw(15) << left << i + 1;
-        cout << setw(25) << left << prescription.listMedicine[i].Name;
-        cout << setw(15) << left << prescription.listMedicine[i].PatentMedicine;
-        cout << setw(10) << right << prescription.listMedicine[i].Quatily;
-        cout << setw(15) << right << prescription.listMedicine[i].UnitPrice; 
-        cout << setw(15) << right << prescription.listMedicine[i].Quatily * prescription.listMedicine[i].UnitPrice << endl;
+        cout << setw(25) << left << prescription.listMedicines[i].Name;
+        cout << setw(15) << left << prescription.listMedicines[i].PatentMedicine;
+        cout << setw(10) << right << prescription.listMedicines[i].Quatily;
+        cout << setw(15) << right << prescription.listMedicines[i].UnitPrice; 
+        cout << setw(15) << right << prescription.listMedicines[i].Quatily * prescription.listMedicines[i].UnitPrice << endl;
     }
 
     //-------------------------------------------------------------------//
@@ -112,6 +112,101 @@ void displayAllPrescriptions(Prescription prescription[], int nPrescription) {
 
 }
 
+
+//Ham nhap mot loai thuoc cho 1 don thuoc
+void enterAMedicine(Medicine& AMedicine) {
+    cin.ignore();
+    cout << "Nhap ten thuoc: ";
+    getline(cin, AMedicine.Name);
+    cout << "Nhap biet duoc: ";
+    getline(cin, AMedicine.PatentMedicine);
+    cout << "Nhap so luong thuoc: ";
+    cin >> AMedicine.Quatily;
+    cout << "Nhap don gia: ";
+    cin >> AMedicine.UnitPrice;
+}
+//9.
+//Ham them mot loai thuoc vao mot don thuoc
+void addAMedicineToAPrescription(Prescription prescription, int& nMedicine, Medicine AMedicine) {
+    prescription.listMedicines[nMedicine] = AMedicine;
+    nMedicine++;
+}
+//Ham tra ve vi tri cua don thuoc co ID id
+int getTheIndexOfPrescriptionHavingIDX(Prescription prescription[], int nPrescription, string id) {
+    for (int i = 0; i < nPrescription; i++) {
+        if (prescription[i].ID == id) {
+            return i;
+        }
+    }
+    return -1;// => Khong co don thuoc nao co ID = id
+}
+//Ham xoa 1 don thuoc tai vi tri k
+void deleteAPrecriptionAtK(Prescription prescription[], int& nPrescription, int k) {
+    for (int i = k; i < nPrescription - 1; i++) {
+        prescription[i] = prescription[i + 1];
+    }
+    nPrescription--;
+}
+
+//Ham xoa cac don thuoc cua benh nhan ten X
+void deleteThePrecriptionsOfPatientX(Prescription prescription[], int& nPrescription, string patientX) {
+    for (int i = 0; i < nPrescription; i++) {
+        if (prescription[i].Patient == patientX) {
+            deleteAPrecriptionAtK(prescription, nPrescription, i);
+            i--;
+        }
+    }
+}
+
+//Ham tim so luong thuoc nhieu nhat
+int getTheMaxnMedicine(Prescription prescription[], int nPrescription) {
+    int max = prescription[0].nMedicine;
+    for (int i = 1; i < nPrescription; i++) {
+        if (prescription[i].nMedicine > max) {
+            max = prescription[i].nMedicine;
+        }
+    }
+    return max;
+}
+//Ham tim tong tien thuoc nhieu nhat theo so luong thuoc nhieu nhat
+int getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription) {
+    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
+    float maxTotalMoney_ByTheMaxnMedicine = -1.0;
+    bool flag = false;
+    for (int i = 1; i < nPrescription; i++) {
+        if (prescription[i].nMedicine == maxnMedicine) {
+            if (flag == false) {
+                maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
+                flag = true;
+            }
+            else {
+                if (prescription[i].TotalMoney > maxTotalMoney_ByTheMaxnMedicine) {
+                    maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
+                }
+            }
+        }
+    }
+    return maxTotalMoney_ByTheMaxnMedicine;
+}
+//Ham hien thi thong tin cua don thuoc co so luong thuoc nhieu nhat va tong tien cao nhat
+void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescription prescription[], int nPrescription) {
+    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
+    float maxTotalMoney_ByTheMaxnMedicine = getTheMaxTotalMoneyByTheMaxnMedicine(prescription, nPrescription);
+    bool flag = false;
+    for (int i = 0; i < nPrescription; i++) {
+        if (prescription[i].nMedicine == maxnMedicine && prescription[i].TotalMoney == maxTotalMoney_ByTheMaxnMedicine) {
+            if (flag == false) {
+                displayAllPrescriptions(prescription, 0);
+                flag = true;
+            }
+            else {
+                cout << setw(10) << left << i + 1;
+                displayAPrescription(prescription[i]);
+            }
+        }
+    }
+}
+
 //Ham menu
 void Menu() {
     cout << "Welcome to Menu !" << endl;
@@ -136,31 +231,31 @@ int main() {
     A[0].Patient = "Minh thu";
     A[0].Doctor = "Minh";
     A[0].TotalMoney = 150;
-    A[0].listMedicine[0].Name = "Paracetamol";
-    A[0].listMedicine[0].PatentMedicine = "Para";
-    A[0].listMedicine[0].Quatily = 12;
-    A[0].listMedicine[0].UnitPrice = 120;
+    A[0].listMedicines[0].Name = "Paracetamol";
+    A[0].listMedicines[0].PatentMedicine = "Para";
+    A[0].listMedicines[0].Quatily = 12;
+    A[0].listMedicines[0].UnitPrice = 120;
     A[0].nMedicine = 2;
 
-    A[0].listMedicine[1].Name = "Panadone";
-    A[0].listMedicine[1].PatentMedicine = "Parabol";
-    A[0].listMedicine[1].Quatily = 20;
-    A[0].listMedicine[1].UnitPrice = 1230;
+    A[0].listMedicines[1].Name = "Panadone";
+    A[0].listMedicines[1].PatentMedicine = "Parabol";
+    A[0].listMedicines[1].Quatily = 20;
+    A[0].listMedicines[1].UnitPrice = 1230;
 
     A[1].ID = "345";
     A[1].Patient = "Thu dep trai";
     A[1].Doctor = "Dr.MinhMinh";
     A[1].TotalMoney = 150;
-    A[1].listMedicine[0].Name = "Paracetamol";
-    A[1].listMedicine[0].PatentMedicine = "Para";
-    A[1].listMedicine[0].Quatily = 12;
-    A[1].listMedicine[0].UnitPrice = 120;
+    A[1].listMedicines[0].Name = "Paracetamol";
+    A[1].listMedicines[0].PatentMedicine = "Para";
+    A[1].listMedicines[0].Quatily = 12;
+    A[1].listMedicines[0].UnitPrice = 120;
     A[1].nMedicine = 2;
 
-    A[1].listMedicine[1].Name = "Panadone";
-    A[1].listMedicine[1].PatentMedicine = "Parabol";
-    A[1].listMedicine[1].Quatily = 20;
-    A[1].listMedicine[1].UnitPrice = 1230;
+    A[1].listMedicines[1].Name = "Panadone";
+    A[1].listMedicines[1].PatentMedicine = "Parabol";
+    A[1].listMedicines[1].Quatily = 20;
+    A[1].listMedicines[1].UnitPrice = 1230;
 
     displayAllPrescriptions(A, 2);
     //
