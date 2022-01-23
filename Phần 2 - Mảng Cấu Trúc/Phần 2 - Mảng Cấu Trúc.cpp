@@ -60,26 +60,26 @@ void displayAPrescription(Prescription prescription) {
     //-------------------------------------------------------------------//
     cout << setw(5) << " ";
     cout << setfill('-');		// set fill ' ' to '-'
-    cout << setw(95) << right<<"-" << endl;	// fill 100 char '-'
+    cout << setw(95) << right << "-" << endl;	// fill 100 char '-'
 
     // reset fill to ' '
     cout << setfill(' ');
     //-------------------------------------------------------------------//
     cout << setw(5) << " ";
-    cout << setw(15) << left << "STT_Thuoc";                                 
+    cout << setw(15) << left << "STT_Thuoc";
     cout << setw(25) << left << "Ten thuoc";
     cout << setw(15) << left << "Biet duoc";
-    cout << setw(10) << right << "So luong";
-    cout << setw(15) << right << "Don gia";
-    cout << setw(15) << right << "Thanh tien" << endl;
-    //-------------------------------------------------------------------//
-    for (int i = 0; i < prescription.nMedicine; i++) {
-        cout << setw(5) << " ";
+        cout << setw(15) << left << j + 1;
+        cout << setw(25) << left << prescription.listMedicine[j].Name;
+        cout << setw(15) << left << prescription.listMedicine[j].PatentMedicine;
+        cout << setw(10) << right << prescription.listMedicine[j].Quatily;
+        cout << setw(15) << right << prescription.listMedicine[j].UnitPrice; 
+        cout << setw(15) << right << prescription.listMedicine[j].Quatily * prescription.listMedicine[i].UnitPrice << endl;
         cout << setw(15) << left << i + 1;
         cout << setw(25) << left << prescription.listMedicines[i].Name;
         cout << setw(15) << left << prescription.listMedicines[i].PatentMedicine;
         cout << setw(10) << right << prescription.listMedicines[i].Quatily;
-        cout << setw(15) << right << prescription.listMedicines[i].UnitPrice; 
+        cout << setw(15) << right << prescription.listMedicines[i].UnitPrice;
         cout << setw(15) << right << prescription.listMedicines[i].Quatily * prescription.listMedicines[i].UnitPrice << endl;
     }
 
@@ -156,56 +156,14 @@ void deleteThePrecriptionsOfPatientX(Prescription prescription[], int& nPrescrip
             i--;
         }
     }
-}
-
-//Ham tim so luong thuoc nhieu nhat
-int getTheMaxnMedicine(Prescription prescription[], int nPrescription) {
-    int max = prescription[0].nMedicine;
-    for (int i = 1; i < nPrescription; i++) {
-        if (prescription[i].nMedicine > max) {
-            max = prescription[i].nMedicine;
-        }
     }
-    return max;
+    return totalallprescription;
 }
-//Ham tim tong tien thuoc nhieu nhat theo so luong thuoc nhieu nhat
-int getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription) {
-    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
-    float maxTotalMoney_ByTheMaxnMedicine = -1.0;
-    bool flag = false;
-    for (int i = 1; i < nPrescription; i++) {
-        if (prescription[i].nMedicine == maxnMedicine) {
-            if (flag == false) {
-                maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
-                flag = true;
-            }
-            else {
-                if (prescription[i].TotalMoney > maxTotalMoney_ByTheMaxnMedicine) {
-                    maxTotalMoney_ByTheMaxnMedicine = prescription[i].TotalMoney;
-                }
-            }
-        }
-    }
-    return maxTotalMoney_ByTheMaxnMedicine;
-}
-//Ham hien thi thong tin cua don thuoc co so luong thuoc nhieu nhat va tong tien cao nhat
-void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescription prescription[], int nPrescription) {
-    int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
-    float maxTotalMoney_ByTheMaxnMedicine = getTheMaxTotalMoneyByTheMaxnMedicine(prescription, nPrescription);
-    bool flag = false;
-    for (int i = 0; i < nPrescription; i++) {
-        if (prescription[i].nMedicine == maxnMedicine && prescription[i].TotalMoney == maxTotalMoney_ByTheMaxnMedicine) {
-            if (flag == false) {
-                displayAllPrescriptions(prescription, 0);
-                flag = true;
-            }
-            else {
-                cout << setw(10) << left << i + 1;
-                displayAPrescription(prescription[i]);
-            }
-        }
-    }
-}
+//Ham menu
+void Menu() {
+    cout << "Welcome to Menu !" << endl;
+    cout << "0.\tExit" << endl;
+    cout << "1.\tTao ma tran nhap tu phim/ngau nhien/doc tu file" << endl;
 
 //Ham menu
 void Menu() {
