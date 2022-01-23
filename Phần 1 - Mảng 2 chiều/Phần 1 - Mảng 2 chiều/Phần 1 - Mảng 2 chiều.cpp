@@ -280,8 +280,8 @@ void Menu() {
     cout << "1.\tTao ma tran nhap tu phim/ngau nhien/doc tu file" << endl;
     cout << "2.\tXuat ma tran" << endl;
     cout << "3.\tTinh gia tri trung binh cong cua 4 bien/duong cheo chinh/duong cheo phu" << endl;
-    cout << "4.\t" << endl;
-    cout << "5.\t" << endl;
+    cout << "4.\tLiet ke danh sach cua tung cot chua toan bo nhung so thinh vuong" << endl;
+    cout << "5.\tHay cho biet dong co chua gia tri trung binh nhan cua cac so nguyen to lon nhat" << endl;
     cout << "6.\t" << endl;
     cout << "7.\t" << endl;
     cout << "8.\t" << endl;
@@ -363,8 +363,11 @@ int main() {
             }
             break;
         case 4:
+			cout << "Cac cot co cac phan tu toan bo la so thinh vuong: " << endl;
+			listColContainProsperityNumber(arr, row, col);
             break;
         case 5:
+			AverageMultiplicationMax(arr, row, col);
             break;
         case 6:;
             break;
@@ -397,3 +400,98 @@ int main() {
     } while (option != 0);
     return 0;
 }
+
+
+//Bài 3:
+void listColContainProsperityNumber(int arr[][MAXCOL], int& row, int& col) // Danh sách cột có toàn là số thịnh vượng
+{
+	bool ColContainProsperityNumber[MAXCOL];
+	for (int i = 0; i < col; i++)
+		ColContainProsperityNumber[i] = true;
+		for (int i = 0; i < col; i++)
+		{
+			for (int j = 0; j < row; j++)
+			{
+				int sum = 0;
+				int x = arr[j][i];
+				for (int k = 1; k < arr[j][i]; k++)
+				{
+					if (arr[j][i] % k == 0)
+					{
+						sum = sum + k;
+					}
+				}
+				if (arr[j][i] >= sum)
+				{
+					ColContainProsperityNumber[i] = false;
+					break;
+				}
+			}
+			
+		}
+		for (int i = 0; i < row; i++)
+		{
+			for (int j = 0; j < col; j++)
+			if (ColContainProsperityNumber[j] == true)
+				cout << "\t " << arr[i][j];
+				cout << endl;
+		}
+}
+
+//Bài 4:
+bool PrimeNumber(int a) // check số nguyên tố
+{
+	if (a < 2) 
+		return false;
+	for (int i = 2; i <= sqrt(a); ++i)
+	{
+		if (a % i == 0) 
+			return false;
+	}
+	return true;
+} 
+void AverageMultiplicationMax(int arr[][MAXCOL], int& row, int& col) // Xuất dòng có giá trị trung bình nhân các số nguyên tố lớn nhất.
+{
+	double A[MAXROW];
+	for (int i = 0; i < row; i++)
+	{
+		int count = 0;
+		int s = 1;
+		for (int j = 0; j < col; j++)
+		{
+			if (PrimeNumber(arr[i][j]))
+			{
+				s *= arr[i][j];
+				count++;
+			}
+		}
+		A[i] = pow(s, 1.0 / count);
+		if (A[i]>1)
+		{
+			cout << "Gia tri TRUNG BINH NHAN cac SO NGUYEN TO cua dong " << i + 1 << " la: " << A[i] << endl;//Trung bình nhân các số nguyên tố của từng dòng.
+		}
+		else
+		{
+			cout << "Dong " << i + 1 << " khong co SO NGUYEN TO." << endl;
+		}
+	}
+	double max = A[0];
+	int d = 0;
+	for (int i = 1; i < row; i++)
+	{
+		if (max < A[i])
+		{
+			max = A[i];
+			d = i; 
+		}
+	}
+	cout << "_____________________________________________________________________________________________" << endl;
+	if (max > 1)
+	{
+		cout << "Gia tri TRUNG BINH NHAN cac SO NGUYEN TO LON NHAT tung dong cua ma tran la: " << max << ". Thuoc Dong : " << d + 1 << endl;
+	}
+	else
+	{
+		cout << "Khong co SO NGUYEN TO nao trong ma tran." << endl;
+	}
+} 
