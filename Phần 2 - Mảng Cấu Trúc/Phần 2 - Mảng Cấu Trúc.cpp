@@ -36,7 +36,7 @@ using std::right;
 struct Medicine {
     string Name;//toi da 30 ki tu
     int Quatity;
-    float UnitPrice;
+    double UnitPrice;
     string PatentMedicine;//toi da 15 ki tu
 };
 
@@ -45,12 +45,184 @@ struct Prescription {
     string Patient;//toi da 30 ki tu
     string Doctor;//toi da 30 ki tu
     Medicine listMedicines[MAXM];//toi da 20
-    float TotalMoney;
+    double TotalMoney;
     int nMedicine;
 };
 
 //Declare Prototype Function
 //2.
+void calculateTotalMoneyOfAPrescription(Prescription& prescription);
+//3.
+void enterPrescriptionFromFile(Prescription prescription[], int& n, string directory);
+//4.
+void displayAPrescription(Prescription prescription);
+void displayAllPrescriptions(Prescription prescription[], int nPrescription);
+//5.
+double totalProceedsOfAllPrescription(Prescription prescription[], int nPrescription);
+//6.
+void swap(Prescription& a, Prescription& b);
+void sortPrescriptionAscendingByTotalMoney(Prescription prescription[], int n);
+//7.
+void displayPrescriptionsOfPatientX(Prescription prescription[], int n, string patientX);
+//8.
+void updateTheNameOfDoctorInPrescriptionsOfPatientX(Prescription prescription[], int n, string patientX);
+//9.
+int getTheIndexOfPrescriptionHavingIDX(Prescription prescription[], int nPrescription, string id);
+void enterAMedicine(Medicine& AMedicine);
+void addAMedicineToAPrescription(Prescription& prescription, Medicine AMedicine);
+//10.
+void deleteAPrecriptionAtK(Prescription prescription[], int& nPrescription, int k);
+void deleteThePrecriptionsOfPatientX(Prescription prescription[], int& nPrescription, string patientX);
+//11.
+int getTheMaxnMedicine(Prescription prescription[], int nPrescription);
+double getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription);
+void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescription prescription[], int nPrescription);
+//12.
+void displayPrescriptionsPrescribedByDoctorY(Prescription prescription[], int nPrescription, string doctorY);
+//13.
+double getCommissionPercentage(Prescription prescription);
+double calculateCommissionFromAllPrescriptions(Prescription prescription[], int nPrescription);
+void displayPrescriptionsWithCommission(Prescription prescription[], int nPrescription);
+//14.
+void displayInfomationOfMedicinesSoldTheMost(Prescription prescription[], int nPrescription);
+//15.
+void sortPrescriptionByNamePatient(Prescription prescription[], int nPrescription);
+void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescription prescription[], int nPrescription);
+
+void Menu();
+
+//Main Function
+int main() {
+    Prescription A[MAXP];
+    Medicine temp;
+    int n = 0;
+    int option = 0;
+    string directory = "ListPrescriptions.txt";
+    string id;
+    string patientX;
+    string doctorY;
+    int k;
+    do {
+        system("cls");
+        Menu();
+        cout << "Hay chon phuong thuc : "; cin >> option;
+        system("cls");
+
+        switch (option) {
+        case 0:cout << "Goodbye  !:<" << endl;
+            break;
+        case 1:
+            cout << "Lay thong tin cac don thuoc tu file ! \nNhap duong dan : "; cin >> directory;
+            enterPrescriptionFromFile(A, n, directory);
+            cout << setfill('-');
+            cout << setw(100) << "-" << endl;
+            // reset fill to ' '
+            cout << setfill(' ');
+            cout << setw(66) << right << "Lay thong tin tu file hoan tat !" << endl;
+            break;
+        case 2:
+            displayAllPrescriptions(A, n);
+            break;
+        case 3:
+            cout << "Tong tien ma nha thuoc da thu duoc sau khi ban xong cac don thuoc la : " << totalProceedsOfAllPrescription(A, n) << endl;
+            break;
+        case 4:
+            sortPrescriptionAscendingByTotalMoney(A, n);
+            cout << setfill('-');
+            cout << setw(100) << "-" << endl;
+            // reset fill to ' '
+            cout << setfill(' ');
+            cout << setw(59) << right << "Sap xep hoan tat !" << endl;
+            break;
+        case 5:
+            cin.ignore();
+            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
+            displayPrescriptionsOfPatientX(A, n, patientX);
+            break;
+        case 6:
+            cout << "Cap nhat ten bac si cho benh nhan X" << endl;
+            cin.ignore();
+            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
+            updateTheNameOfDoctorInPrescriptionsOfPatientX(A, n, patientX);
+            break;
+        case 7:
+            cin.ignore();
+            cout << "Nhap ID : "; getline(cin, id);
+            k = getTheIndexOfPrescriptionHavingIDX(A, n, id);
+            if (k != -1) {
+                enterAMedicine(temp);
+                addAMedicineToAPrescription(A[k], temp);
+                cout << setfill('-');
+                cout << setw(100) << "-" << endl;
+                // reset fill to ' '
+                cout << setfill(' ');
+                cout << setw(59) << right << "Them thanh cong !" << endl;
+            }
+            else {
+                cout << "Khong tim thay don thuoc nao co ID " << id << endl;
+            }
+            break;
+        case 8:
+            cin.ignore();
+            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
+            deleteThePrecriptionsOfPatientX(A, n, patientX);
+            break;
+        case 9:
+            cout << "Cac don thuoc co nhieu loai thuoc nhat va co tong tien cao nhat la : " << endl;
+            displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(A, n);
+            break;
+        case 10:
+            cin.ignore();
+            cout << "Nhap ten bac si Y : "; getline(cin, doctorY);
+            displayPrescriptionsPrescribedByDoctorY(A, n, doctorY);
+            break;
+        case 11:
+            displayPrescriptionsWithCommission(A, n);
+            cout << setw(70) << right << "Tong tien hoa hong";
+            cout << setw(30) << right << calculateCommissionFromAllPrescriptions(A, n);
+            break;
+        case 12:
+            displayInfomationOfMedicinesSoldTheMost(A, n);
+            break;
+        case 13:
+            cout << "Thong tin benh theo so luong don thuoc va tong tien da chi tra" << endl;
+            cout << setfill('-');
+            cout << setw(100) << "-" << endl;
+            // reset fill to ' '
+            cout << setfill(' ');
+            displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(A, n);
+            break;
+        default:cout << "Phuong thuc khong hop le !! :<" << endl;
+        }
+        cout << setfill('-');
+        cout << setw(100) << "-" << endl;
+        // reset fill to ' '
+        cout << setfill(' ');
+        system("pause>0");
+    } while (option != 0);
+    return 0;
+}
+
+//Function Writing Part
+//2.
+//Ham menu
+void Menu() {
+    cout << "Welcome to Menu !" << endl;
+    cout << "0.\tExit" << endl;
+    cout << "1.\tLay thong tin cac don thuoc tu file" << endl;
+    cout << "2.\tXuat thong tin cac don thuoc" << endl;
+    cout << "3.\tTinh tong tien thu duoc tu cac don thuoc da ban" << endl;
+    cout << "4.\tSap xep don thuoc tang dan theo tong tien" << endl;
+    cout << "5.\tLiet ke cac don thuoc ban cho khach hang X" << endl;
+    cout << "6.\tDieu chinh ten bac si trong don thuoc ban cho benh nhan X" << endl;
+    cout << "7.\tThem mot loai thuoc vao don thuoc co ma X trong danh sach" << endl;
+    cout << "8.\tXoa cac don thuoc cua benh nhan X" << endl;
+    cout << "9.\tCho biet thong tin don thuoc co nhieu loai thuoc nhat va tong tien cao nhat" << endl;
+    cout << "10.\tLiet ke cac don thuoc cua bac si Y" << endl;
+    cout << "11.\tTinh hoa hong nha thuoc nhan duoc khi ban cac don thuoc" << endl;
+    cout << "12.\tIn thong tin cung so luong loai thuoc đuoc nha thuoc ban ra nhieu nhat" << endl;
+    cout << "13.\tThong ke theo benh nhan so tien va don thuoc ho da mua" << endl;
+}
 //Ham tinh tong tien thuoc cho 1 don thuoc
 void calculateTotalMoneyOfAPrescription(Prescription& prescription) {
     prescription.TotalMoney = 0;
@@ -64,7 +236,7 @@ void enterPrescriptionFromFile(Prescription prescription[], int& n, string direc
     fstream file;
     file.open(directory, ios::in);//read mode
     if (file.is_open()) {
-        char temp[2];
+        string temp;
         file >> n;
         file.ignore();
         for (int i = 0; i < n; i++) {
@@ -72,11 +244,13 @@ void enterPrescriptionFromFile(Prescription prescription[], int& n, string direc
             getline(file, prescription[i].Patient);
             getline(file, prescription[i].Doctor);
             prescription[i].nMedicine = -1;
+
             while (file >> temp) {
-                if (temp[0] == '-') {
+                if (temp == "#KT ") {
                     break;
                 }
                 prescription[i].nMedicine++;
+                file.ignore();
                 getline(file, prescription[i].listMedicines[prescription[i].nMedicine].Name, '#');
                 getline(file, prescription[i].listMedicines[prescription[i].nMedicine].PatentMedicine, '#');
                 file >> prescription[i].listMedicines[prescription[i].nMedicine].Quatity;
@@ -85,6 +259,7 @@ void enterPrescriptionFromFile(Prescription prescription[], int& n, string direc
                 file.ignore();
             }
             calculateTotalMoneyOfAPrescription(prescription[i]);
+            file.ignore();
         }
         file.close();
     }
@@ -151,18 +326,23 @@ void displayAllPrescriptions(Prescription prescription[], int nPrescription) {
         cout << setw(10) << left << i + 1;
         displayAPrescription(prescription[i]);
     }
-
 }
 //5.
 //Ham tinh tong tien cua tat ca cac don thuoc da ban 
-float totalProceedsOfAllPrescription(Prescription prescription[], int nPrescription) {
-    float total = 0;
+double totalProceedsOfAllPrescription(Prescription prescription[], int nPrescription) {
+    double total = 0;
     for (int i = 0; i < nPrescription; i++) {
-        total+= prescription[i].TotalMoney;
+        total += prescription[i].TotalMoney;
     }
     return total;
 }
 //6.
+//Ham chuyen doi hai don thuoc
+void swap(Prescription& a, Prescription& b) {
+    Prescription temp = a;
+    a = b;
+    b = temp;
+}
 //Hàm sap xep danh sach don thuoc tang dan theo tong tien
 void sortPrescriptionAscendingByTotalMoney(Prescription prescription[], int n) {
     for (int i = 0; i < n - 1; i++) {
@@ -190,12 +370,12 @@ void displayPrescriptionsOfPatientX(Prescription prescription[], int n, string p
         }
     }
     if (!flag) {
-        cout << "Khong co don thuoc nao co benh nhan ten "<< patientX << endl;
+        cout << "Khong co don thuoc nao co benh nhan ten " << patientX << endl;
     }
 }
 //8.
 //Ham cap nhat lai thong tin ten cua bac si trong don thuoc cua benh nhan co ten la X
-void updateTheNameOfDoctorInPrescriptionsOfPatientX(Prescription prescription[], int n, string patientX){
+void updateTheNameOfDoctorInPrescriptionsOfPatientX(Prescription prescription[], int n, string patientX) {
     bool flag = false;
     for (int i = 0; i < n; i++) {
         if (prescription[i].Patient == patientX) {
@@ -284,9 +464,9 @@ int getTheMaxnMedicine(Prescription prescription[], int nPrescription) {
     return max;
 }
 //Ham tim tong tien thuoc nhieu nhat theo so luong thuoc nhieu nhat
-int getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription) {
+double getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPrescription) {
     int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
-    float maxTotalMoney_ByTheMaxnMedicine = -1.0;
+    double maxTotalMoney_ByTheMaxnMedicine = -1.0;
     bool flag = false;
     for (int i = 1; i < nPrescription; i++) {
         if (prescription[i].nMedicine == maxnMedicine) {
@@ -306,7 +486,7 @@ int getTheMaxTotalMoneyByTheMaxnMedicine(Prescription prescription[], int nPresc
 //Ham hien thi thong tin cua don thuoc co so luong thuoc nhieu nhat va tong tien cao nhat
 void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescription prescription[], int nPrescription) {
     int maxnMedicine = getTheMaxnMedicine(prescription, nPrescription);
-    float maxTotalMoney_ByTheMaxnMedicine = getTheMaxTotalMoneyByTheMaxnMedicine(prescription, nPrescription);
+    double maxTotalMoney_ByTheMaxnMedicine = getTheMaxTotalMoneyByTheMaxnMedicine(prescription, nPrescription);
     bool flag = false;
     for (int i = 0; i < nPrescription; i++) {
         if (prescription[i].nMedicine == maxnMedicine && prescription[i].TotalMoney == maxTotalMoney_ByTheMaxnMedicine) {
@@ -321,28 +501,168 @@ void displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(Prescriptio
         }
     }
 }
-
-
-//15.
-//Ham chuyen doi hai don thuoc
-void swap(Prescription& a, Prescription& b) {
-    Prescription temp = a;
-    a = b;
-    b = temp;
+//12.
+//Ham in cac don thuoc cua bac si Y da ke don
+void displayPrescriptionsPrescribedByDoctorY(Prescription prescription[], int nPrescription, string doctorY) {
+    bool flag = false;
+    for (int i = 0; i < nPrescription; i++) {
+        if (prescription[i].Doctor == doctorY) {
+            if (!flag) {
+                displayAllPrescriptions(prescription, 0);
+                flag = true;
+            }
+            else {
+                cout << setw(10) << left << i + 1;
+                displayAPrescription(prescription[i]);
+            }
+        }
+    }
+    if (!flag) {
+        cout << "Khong co don thuoc nao cua bac si " << doctorY << " ke don" << endl;
+    }
 }
+//13.
+//Ham tinh % hoa hong cho 1 don thuoc
+double getCommissionPercentage(Prescription prescription) {
+    if (prescription.TotalMoney <= 1000) return 0.1;
+    if (1000 < prescription.TotalMoney <= 10000) return 0.08;
+    return 0.05;
+}
+//Ham tinh tien hoa hong ma nha thuoc nhan duoc tu cac don thuoc
+double calculateCommissionFromAllPrescriptions(Prescription prescription[], int nPrescription) {
+    double sum = 0;
+    for (int i = 0; i < nPrescription; i++) {
+        sum += prescription[i].TotalMoney * getCommissionPercentage(prescription[i]);
+    }
+    return sum;
+}
+//Ham thong ke cac don thuoc theo % hoa hong va tien hoa hong
+void displayPrescriptionsWithCommission(Prescription prescription[], int nPrescription) {
+    cout << setw(20) << left << "STT";
+    cout << setw(15) << left << "Ma don thuoc";
+    cout << setw(20) << right << "Tong tien";
+    cout << setw(15) << right << "% Hoa hong";
+    cout << setw(20) << right << "Tien hoa hong" << endl;
+
+    cout << setfill('-');
+    cout << setw(100) << "-" << endl;
+
+    // reset fill to ' '
+    cout << setfill(' ');
+
+    for (int i = 0; i < nPrescription; i++) {
+        double CP = getCommissionPercentage(prescription[i]);
+        cout << setw(20) << left << i + 1;
+        cout << setw(15) << left << prescription[i].ID;
+        cout << setw(20) << right << prescription[i].TotalMoney;
+        cout << setw(15) << right << 100 * CP << "%";
+        cout << setw(20) << right << prescription[i].TotalMoney * CP << endl;
+    }
+}
+//14.
+int getTheMaxamountsoldmedicine(Prescription prescription[], int n) {
+    int max = prescription[0].listMedicine[0].Quatily;
+    string sum;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < prescription[i].nMedicine; j++) {
+            for (int m = i + 1; m < n; m++) {
+                for (int n = i + 1; n < prescription[i].nMedicine; n++) {
+                    if (prescription[i].listMedicine[j].Name == prescription[m].listMedicine[n].Name) {
+                        if (prescription[i].listMedicine[j].Quatily + prescription[m].listMedicine[n].Quatily > max) {
+                            max = prescription[i].listMedicine[j].Quatily + prescription[m].listMedicine[n].Quatily;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return max;
+}
+void displayTheMaxamountsoldmedicinewithQuatify(Prescription prescription[], int n) {
+    int max = getTheMaxamountsoldmedicine(prescription, n);
+    int sum = 0;
+    string temp;
+    cout << setw(20) << left << "Ten thuoc";
+    cout << setw(20) << left << "so luong" << endl;
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < prescription[i].nMedicine; j++) {
+            for (int m = i + 1; m < n; m++) {
+                for (int n = i + 1; n < prescription[i].nMedicine; n++) {
+                    if (prescription[i].listMedicine[j].Name == prescription[m].listMedicine[n].Name) {
+                        if (prescription[i].listMedicine[j].Quatily + prescription[m].listMedicine[n].Quatily == max) {
+                            cout << setw(20) << left << prescription[i].listMedicine[j].Name;
+                            cout << setw(20) << left << max;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//Ham hien thi ten va so luong cua loai thuoc co so luong da ban nhieu nhat
+void displayInfomationOfMedicinesSoldTheMost(Prescription prescription[], int nPrescription) {
+    Medicine temp[100];
+    temp[0].Name = "";
+    int count = 1;
+    bool flag = false;
+    for (int i = 1; i < nPrescription; i++) {
+        for (int j = 0; j < prescription[i].nMedicine; j++) {
+            flag = false;
+            for (int k = 0; k < count; k++) {
+                if (prescription[i].listMedicines[j].Name == temp[k].Name) {
+                    temp[j].Quatity += prescription[i].listMedicines[j].Quatity;
+                    if (flag == false) {
+                        flag = true;
+                    }
+                }
+            }
+            if (!flag) {
+                temp[count] = prescription[i].listMedicines[j];
+                count++;
+            }
+        }
+    }
+    int max = temp[0].Quatity;
+    for (int i = 1; i < count; i++) {
+        if (temp[i].Quatity > max) {
+            max = temp[i].Quatity;
+        }
+    }
+    //
+    cout << setw(10) << left << " ";
+    cout << setw(20) << left << "Ten thuoc";
+    cout << setw(15) << right << "So luong da ban" << endl;
+
+    cout << setw(10) << left << " ";
+    cout << setfill('-');
+    cout << setw(45) << "-" << endl;
+
+    // reset fill to ' '
+    cout << setfill(' ');
+    //
+    for (int i = 0; i < count; i++) {
+        if (temp[i].Quatity == max) {
+            cout << setw(10) << left << " ";
+            cout << setw(20) << left << temp[i].Name;
+            cout << setw(15) << left << temp[i].Quatity << endl;
+        }
+    }
+}
+//15.
 //Ham sap xep cac don thuoc theo ten benh nhan
 void sortPrescriptionByNamePatient(Prescription prescription[], int nPrescription) {
     for (int i = 0; i < nPrescription - 1; i++) {
-        for (int j = i+1; j < nPrescription; j++) {
+        for (int j = i + 1; j < nPrescription; j++) {
             if (prescription[i].Patient > prescription[j].Patient) {
                 swap(prescription[i].Patient, prescription[j].Patient);
             }
         }
     }
 }
-//Ham hien thi thong tin benh theo so luong don thuoc va tong tien da chi tra
+//Ham hien thi thong tin benh nhan theo so luong don thuoc va tong tien da chi tra
 void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescription prescription[], int nPrescription) {
-    Prescription *temp = new Prescription[nPrescription];
+    Prescription* temp = new Prescription[nPrescription];
     for (int i = 0; i < nPrescription; i++) {
         temp[i] = prescription[i];
     }
@@ -363,7 +683,7 @@ void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescrip
     //
 
     int count = 1;
-    float total = 0;
+    double total = 0;
     for (int i = 0; i < nPrescription; i++) {
         total += temp[i].TotalMoney;
         if (i == nPrescription - 1) {
@@ -372,7 +692,7 @@ void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescrip
             cout << setw(5) << right << count;
             cout << setw(15) << right << total << endl;
         }
-        else if (temp[i].Patient != temp[i+1].Patient) {
+        else if (temp[i].Patient != temp[i + 1].Patient) {
             cout << setw(5) << left << " ";
             cout << setw(30) << left << temp[i].Patient;
             cout << setw(15) << right << count;
@@ -385,128 +705,4 @@ void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescrip
         }
     }
     delete[] temp;
-}
-
-//Ham menu
-void Menu() {
-    cout << "Welcome to Menu !" << endl;
-    cout << "0.\tExit" << endl;
-    cout << "1.\tLay thong tin cac đon thuoc tu file" << endl;
-    cout << "2.\tXuat thong tin cac don thuoc" << endl;
-    cout << "3.\tTinh tong tien thu duoc tu cac don thuoc da ban" << endl;
-    cout << "4.\tSap xep don thuoc tang dan theo tong tien" << endl;
-    cout << "5.\tLiet ke cac don thuoc ban cho khach hang X" << endl;
-    cout << "6.\tDieu chinh ten bac si trong don thuoc ban cho benh nhan X" << endl;
-    cout << "7.\tThem mot loai thuoc vao don thuoc co ma X trong danh sach" << endl;
-    cout << "8.\tXoa cac don thuoc cua benh nhan X" << endl;
-    cout << "9.\tCho biet thong tin don thuoc co nhieu loai thuoc nhat va tong tien cao nhat" << endl;
-    cout << "10.\tLiet ke cac don thuoc cua bac si Y" << endl;
-    cout << "11.\tTinh hoa hong nha thuoc nhan duoc khi ban cac don thuoc" << endl;
-    cout << "12.\tIn thong tin cung so luong loai thuoc đuoc nha thuoc ban ra nhieu nhat" << endl;
-    cout << "13.\tThong ke theo benh nhan so tien va don thuoc ho da mua" << endl;
-}
-
-
-//Main Function
-int main() {
-    Prescription A[MAXP];
-    Medicine temp;
-    int n = 0;
-    int option = 0;
-    string directory = "Text1.txt";
-    string id;
-    string patientX;
-    int k;
-    do {
-        system("cls");
-        Menu();
-        cout << "Hay chon phuong thuc123 : "; cin >> option;
-        system("cls");
-
-        switch (option) {
-        case 0:cout << "Goodbye  !:<" << endl;
-            break;
-        case 1:
-            cout << "Lay thong tin cac don thuoc tu file ! \nNhap duong dan : "; cin >> directory;
-            enterPrescriptionFromFile(A, n, directory);
-            cout << setfill('-');
-            cout << setw(100) << "-" << endl;
-            // reset fill to ' '
-            cout << setfill(' ');
-            cout << setw(66) << right << "Lay thong tin tu file hoan tat !" << endl;
-            break;
-        case 2:
-            displayAllPrescriptions(A, n);
-            break;
-        case 3:
-            cout << "Tong tien ma nha thuoc da thu duoc sau khi ban xong cac don thuoc la : " << totalProceedsOfAllPrescription(A, n) << endl;
-            break;
-        case 4:
-            sortPrescriptionAscendingByTotalMoney(A, n);
-            cout << setfill('-');
-            cout << setw(100) << "-" << endl;
-            // reset fill to ' '
-            cout << setfill(' ');
-            cout << setw(59) << right << "Sap xep hoan tat !" << endl;
-            break;
-        case 5:
-            cin.ignore();
-            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
-            displayPrescriptionsOfPatientX(A, n, patientX);
-            break;
-        case 6:
-            cout << "Cap nhat ten bac si cho benh nhan X" << endl;
-            cin.ignore();
-            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
-            updateTheNameOfDoctorInPrescriptionsOfPatientX(A, n, patientX);
-            break;
-        case 7:
-            cin.ignore();
-            cout << "Nhap ID : "; getline(cin, id);
-            k = getTheIndexOfPrescriptionHavingIDX(A, n, id);
-            if (k != -1) {
-                enterAMedicine(temp);
-                addAMedicineToAPrescription(A[k], temp);
-                cout << setfill('-');
-                cout << setw(100) << "-" << endl;
-                // reset fill to ' '
-                cout << setfill(' ');
-                cout << setw(59) << right << "Them thanh cong !" << endl;
-            }
-            else {
-                cout << "Khong tim thay don thuoc nao co ID " << id << endl;
-            }
-            break;
-        case 8:
-            cin.ignore();
-            cout << "Nhap ten benh nhan X : "; getline(cin, patientX);
-            deleteThePrecriptionsOfPatientX(A, n, patientX);
-            break;
-        case 9:
-            cout << "Cac don thuoc co nhieu loai thuoc nhat va co tong tien cao nhat la : " << endl;
-            displayThePrescriptionsHavingTheMaxnMedicineAndTheMaxTotalMoney(A, n);
-            break;
-        case 10:
-            break;
-        case 11:
-            break;
-        case 12:
-            break;
-        case 13:
-            cout << "Thong tin benh theo so luong don thuoc va tong tien da chi tra" << endl;
-            cout << setfill('-');
-            cout << setw(100) << "-" << endl;
-            // reset fill to ' '
-            cout << setfill(' ');
-            displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(A, n);
-            break;
-        default:cout << "Phuong thuc khong hop le !! :<" << endl;
-        }
-        cout << setfill('-');
-        cout << setw(100) << "-" << endl;
-        // reset fill to ' '
-        cout << setfill(' ');
-        system("pause>0");
-    } while (option != 0);
-    return 0;
 }

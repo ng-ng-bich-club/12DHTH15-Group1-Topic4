@@ -2,18 +2,18 @@
 A123
 Nguyen Kim Khanh
 Tran Quoc Phong
-#Paracetamol#Acetaminophen#10#500
-#Vitamin C#Acid ascorbic#100#200
--
+# Paracetamol#Acetaminophen#10#500
+# Vitamin C#Acid ascorbic#100#200
+#KT
 A453
 Pham Thi Thu Trang
 Le Dinh Phong
-#Laroscorbine#Acid ascorbic#7#300
-#Choludexan#Acid ursodeoxycholic#10#13000
-#Intagra 50#Sildenafil#4#6000
--
+# Laroscorbine#Acid ascorbic#7#300
+# Choludexan#Acid ursodeoxycholic#10#13000
+# Intagra 50#Sildenafil#4#6000
+#KT
 C325
 Le Van Thanh
 Ta Van Tan
-#Cefditoren 200#Cefditoren#20#26770
--
+# Cefditoren 200#Cefditoren#20#26770
+#KT

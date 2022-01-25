@@ -70,8 +70,7 @@ int countTheNumberOfAppearanceOfMatrixEInMatrixA(int A[][MAXCOL], int row, int c
 //9.
 void createTheRightRotationMatrixF(int A[][MAXCOL], int row, int col, int F[][MAXCOL], int k);
 //10.
-void swap(int& a, int& b);
-void sortintoTheDescendingArray(int arr[], int n);
+void sortintoTheAscendingArray(int arr[], int n);
 void createTheDescendingSpiralMatrixI(int A[][MAXCOL], int row, int col, int I[][MAXCOL]);
 //Menu
 void Menu();
@@ -651,17 +650,17 @@ void createTheRightRotationMatrixF(int A[][MAXCOL], int row, int col, int F[][MA
     }
 }
 //10.
-//Ham sap xep mang 1 chieu giam dan
-void sortintoTheDescendingArray(int arr[], int n) {
+//Ham sap xep mang 1 chieu
+void sortintoTheAscendingArray(int arr[], int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = i + 1; j < n; j++) {
-            if (arr[i] < arr[j]) {
+            if (arr[i] > arr[j]) {
                 swap(arr[i], arr[j]);
             }
         }
     }
 }
-//Ham tao ma tran I xoan oc giam dan nguoc chieu kim dong ho
+//Ham tao ma tran I xoan oc tang dan nguoc chieu kim dong ho
 void createTheDescendingSpiralMatrixI(int A[][MAXCOL], int row, int col, int I[][MAXCOL]) {
     //Neu row hoac col == 1 => Khong the co ma tran xoan oc
     if (row != 1 || col != 1) {
@@ -670,7 +669,7 @@ void createTheDescendingSpiralMatrixI(int A[][MAXCOL], int row, int col, int I[]
         for (int i = 0; i < n; i++) {
             Temp[i] = A[i / col][i % col];
         }
-        sortintoTheDescendingArray(Temp, n);
+        sortintoTheAscendingArray(Temp, n);
         //
         int Top_Limit = 0;
         int Bottom_Limit = row - 1;
