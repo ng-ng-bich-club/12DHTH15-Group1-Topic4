@@ -50,9 +50,9 @@ void displayColumnsHavingAllProsperityNumber(int A[][MAXCOL], int row, int col);
 //4.
 //Ham check so nguyen to
 bool isPrimeNumber(int a);
-float calculateGeometricMeanOfThePrimeNumbersOnColumnK(int A[][MAXCOL], int row, int columnK);
-float getTheMaxGeometricMeanOfThePrimeNumbersOnColumns(int A[][MAXCOL], int row, int col);
-void displayColumnsHavingTheMaxGeometricMeanOfThePrimeNumbers(int A[][MAXCOL], int row, int col);
+float calculateGeometricMeanOfThePrimeNumbersOnRowK(int A[][MAXCOL], int col, int rowK);
+float getTheMaxGeometricMeanOfThePrimeNumbersOnRows(int A[][MAXCOL], int row, int col);
+void displayRowHavingTheMaxGeometricMeanOfThePrimeNumbers(int A[][MAXCOL], int row, int col);
 //5.
 void swap(int& a, int& b);
 void convert2Columns(int A[][MAXCOL], int row, int col, int k, int l);
@@ -189,7 +189,7 @@ int main() {
             break;
         case 5:
             cout << "Dong chua gia tri trung binh nhan cua cac so nguyen to lon nhat la : " << endl;
-            displayColumnsHavingTheMaxGeometricMeanOfThePrimeNumbers(A, row, col);
+            displayRowHavingTheMaxGeometricMeanOfThePrimeNumbers(A, row, col);
             break;
         case 6:
             cout << "Nhap cot c1 : "; cin >> c1;
@@ -428,13 +428,13 @@ bool isPrimeNumber(int a) {
     }
     return true;
 }
-//Ham tinh trung binh nhan cua cac gia tri la so nguyen to tren cot k
-float calculateGeometricMeanOfThePrimeNumbersOnColumnK(int A[][MAXCOL], int row, int columnK) {
+//Ham tinh trung binh nhan cua cac gia tri la so nguyen to tren dong k
+float calculateGeometricMeanOfThePrimeNumbersOnRowK(int A[][MAXCOL], int col, int rowK) {
     int count = 0;
     int product = 1;
-    for (int i = 0; i < row; i++) {
-        if (isPrimeNumber(A[i][columnK])) {
-            product *= A[i][columnK];
+    for (int j = 0; j < col; j++) {
+        if (isPrimeNumber(A[rowK][j])) {
+            product *= A[rowK][j];
             count++;
         }
     }
@@ -443,28 +443,28 @@ float calculateGeometricMeanOfThePrimeNumbersOnColumnK(int A[][MAXCOL], int row,
     }
     return 0;
 }
-//Hàm tim giá trị trung bình nhân các số nguyên tố lớn nhất
-float getTheMaxGeometricMeanOfThePrimeNumbersOnColumns(int A[][MAXCOL], int row, int col) {
+//Hàm tim giá trị lớn nhất trung bình nhân các số nguyên tố của dòng
+float getTheMaxGeometricMeanOfThePrimeNumbersOnRows(int A[][MAXCOL], int row, int col) {
     bool flag = false;
     float GM;
-    float max = calculateGeometricMeanOfThePrimeNumbersOnColumnK(A, row, 0);
-    for (int j = 1; j < col; j++) {
-        GM = calculateGeometricMeanOfThePrimeNumbersOnColumnK(A, row, j);
+    float max = calculateGeometricMeanOfThePrimeNumbersOnRowK(A, col, 0);
+    for (int i = 1; i < row; i++) {
+        GM = calculateGeometricMeanOfThePrimeNumbersOnRowK(A, col, i);
         if (GM > max) {
             max = GM;
         }
     }
-    return max;//Neu khong co cot nao co so nguyen to => return 0;
+    return max;//Neu khong co dong nao co so nguyen to => return 0;
 }
 //Hàm xuất dòng có giá trị trung bình nhân các số nguyên tố lớn nhất.
-void displayColumnsHavingTheMaxGeometricMeanOfThePrimeNumbers(int A[][MAXCOL], int row, int col) {
+void displayRowHavingTheMaxGeometricMeanOfThePrimeNumbers(int A[][MAXCOL], int row, int col) {
     bool flag = false;
-    float max = getTheMaxGeometricMeanOfThePrimeNumbersOnColumns(A, row, col);
+    float max = getTheMaxGeometricMeanOfThePrimeNumbersOnRows(A, row, col);
     if (max != 0) {
-        for (int j = 1; j < col; j++) {
-            if (calculateGeometricMeanOfThePrimeNumbersOnColumnK(A, row, j) == max) {
-                cout << "Cot " << j << " : ";
-                for (int i = 0; i < row; i++) {
+        for (int i = 0; i < row; i++) {
+            if (calculateGeometricMeanOfThePrimeNumbersOnRowK(A, col, i) == max) {
+                cout << "Dong " << i << " : ";
+                for (int j = 0; j < col; j++) {
                     cout << A[i][j] << " ";
                 }
                 cout << endl;
