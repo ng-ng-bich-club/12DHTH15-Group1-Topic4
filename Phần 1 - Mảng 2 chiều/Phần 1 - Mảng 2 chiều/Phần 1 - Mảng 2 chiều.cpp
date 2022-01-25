@@ -7,6 +7,7 @@
     + 2001216306 - Lê Thị Khánh Vân
  - Last modify : 20:00 - 15/01/2022
 */
+#define _CRT_SECURE_NO_WARNINGS
 //Declare Library
 #include <iostream>
 #include <fstream>
