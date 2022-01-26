@@ -1,4 +1,4 @@
-3
+5
 A123
 Nguyen Kim Khanh
 Tran Quoc Phong
@@ -15,5 +15,19 @@ Intagra 50#Sildenafil#4#6000
 C325
 Le Van Thanh
 Ta Van Tan
-1
+3
 Cefditoren 200#Cefditoren#20#26770
+histamin#histam#19#27500
+Brompheniramine#Dimetane#30#18500
+D341
+Ho Van Cuong
+Tran Van Sang
+2
+Cetirizine#Zyrtec#25#29800
+Clemastine#TAVIST#32#31500
+E325
+Nguyen Thi Hong
+Tran Vu hoa
+2
+Diphenhydramine#Benadryl#12#12500
+Fexofenadine#Allegra#25#19300
