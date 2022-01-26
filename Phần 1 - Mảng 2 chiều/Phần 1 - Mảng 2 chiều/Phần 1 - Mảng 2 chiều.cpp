@@ -650,7 +650,7 @@ void createTheRightRotationMatrixF(int A[][MAXCOL], int row, int col, int F[][MA
     }
 }
 //10.
-//Ham sap xep mang 1 chieu
+//Ham sap xep mang 1 chieu tang dan
 void sortintoTheAscendingArray(int arr[], int n) {
     for (int i = 0; i < n - 1; i++) {
         for (int j = i + 1; j < n; j++) {
@@ -660,7 +660,7 @@ void sortintoTheAscendingArray(int arr[], int n) {
         }
     }
 }
-//Ham tao ma tran I xoan oc tang dan nguoc chieu kim dong ho
+//Ham tao ma tran I xoan oc giam dan nguoc chieu kim dong ho
 void createTheDescendingSpiralMatrixI(int A[][MAXCOL], int row, int col, int I[][MAXCOL]) {
     //Neu row hoac col == 1 => Khong the co ma tran xoan oc
     if (row != 1 || col != 1) {
