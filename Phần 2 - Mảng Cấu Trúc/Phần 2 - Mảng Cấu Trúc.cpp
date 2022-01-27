@@ -87,7 +87,7 @@ void displayInfomationOfMedicinesSoldTheMost(Prescription prescription[], int nP
 void sortPrescriptionByNamePatient(Prescription prescription[], int nPrescription);
 void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescription prescription[], int nPrescription);
 //Hàm ghi, lưu lại thông tin vào file
-void saveListPrescriptionsToFile(Prescription prescription[], int nPrescription, string directory);
+void saveListPrescriptionsToFile(Prescription prescription[], int& nPrescription, string directory);
 void Menu();
 
 //Main Function
@@ -657,7 +657,7 @@ void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescrip
 
 //------
 //Hàm ghi, lưu lại thông tin vào file
-void saveListPrescriptionsToFile(Prescription prescription[], int nPrescription, string directory) {
+void saveListPrescriptionsToFile(Prescription prescription[], int& nPrescription, string directory) {
     fstream file;
     file.open(directory, ios::out);//write mode
     if (file.is_open()) {
@@ -667,7 +667,7 @@ void saveListPrescriptionsToFile(Prescription prescription[], int nPrescription,
             file << "\n" << prescription[i].Patient;
             file << "\n" << prescription[i].Doctor;
             file << "\n" << prescription[i].nMedicine;
-            for (int j = 0; i < prescription[i].nMedicine; j++) {
+            for (int j = 0; j < prescription[i].nMedicine; j++) {
                 file << "\n" << prescription[i].listMedicines[j].Name;
                 file << "#" << prescription[i].listMedicines[j].PatentMedicine;
                 file << "#" << prescription[i].listMedicines[j].Quantity;
