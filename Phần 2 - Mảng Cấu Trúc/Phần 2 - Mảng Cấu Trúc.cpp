@@ -86,7 +86,8 @@ void displayInfomationOfMedicinesSoldTheMost(Prescription prescription[], int nP
 //15.
 void sortPrescriptionByNamePatient(Prescription prescription[], int nPrescription);
 void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescription prescription[], int nPrescription);
-
+//Hàm ghi, lưu lại thông tin vào file
+void saveListPrescriptionsToFile(Prescription prescription[], int nPrescription, string directory);
 void Menu();
 
 //Main Function
@@ -204,6 +205,12 @@ int main() {
         cout << setfill(' ');
         system("pause>0");
     } while (option != 0);
+    cout << "Ban co muon luu lai vao file truoc khi thoat hay khong ?\n0. No\n1. Yes\nChon 0 hoac 1 : "; cin >> option;
+    if (option == 1) {
+        saveListPrescriptionsToFile(A, n, directory);
+        system("cls");
+        cout << "Luu thanh cong ! " << endl;
+    }
     return 0;
 }
 
@@ -646,4 +653,30 @@ void displayInfomationOfPatientByTheNumberOfPreascriptionsAndTotalMoney(Prescrip
         }
     }
     delete[] temp;
+}
+
+//------
+//Hàm ghi, lưu lại thông tin vào file
+void saveListPrescriptionsToFile(Prescription prescription[], int nPrescription, string directory) {
+    fstream file;
+    file.open(directory, ios::out);//write mode
+    if (file.is_open()) {
+        file << nPrescription;
+        for (int i = 0; i < nPrescription; i++) {
+            file << "\n" << prescription[i].ID;
+            file << "\n" << prescription[i].Patient;
+            file << "\n" << prescription[i].Doctor;
+            file << "\n" << prescription[i].nMedicine;
+            for (int j = 0; i < prescription[i].nMedicine; j++) {
+                file << "\n" << prescription[i].listMedicines[j].Name;
+                file << "#" << prescription[i].listMedicines[j].PatentMedicine;
+                file << "#" << prescription[i].listMedicines[j].Quantity;
+                file << "#" << prescription[i].listMedicines[j].UnitPrice;
+            }
+        }
+        file.close();
+    }
+    else {
+        cout << "Khong tim thay file !" << endl;
+    }
 }
